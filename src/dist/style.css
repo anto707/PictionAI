@@ -1,0 +1,318 @@
+@import url('https://fonts.cdnfonts.com/css/goudy-old-style');             
+
+#App { 
+    font-family: 'Goudy Old Style', sans-serif;                                               
+    background-image: url("../assets/bg_2.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    min-height: 100vh;
+}
+
+
+#logo{
+    margin-top: 10%;
+}
+
+.pencil-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    visibility: hidden;
+    display: flex;
+    z-index: 1000;
+    animation: zigzagDraw 4s ease-in-out 1s forwards, fadeOut 0.7s ease-in-out 4s forwards;
+  }
+  
+  @keyframes zigzagDraw {
+    0% {
+      top: 20%;
+      left: 0;
+    }
+    20% {
+      top: 20%;
+      left: 100%;
+      transform: rotate(20deg);
+      opacity:1;
+      visibility: visible;
+    }
+    40% {
+      top: 40%;
+      left: 0;
+      transform: rotate(-20deg);
+      opacity:1;
+      visibility: visible;
+    }
+    60% {
+      top: 60%;
+      left: 100%;
+      transform: rotate(20deg);
+      opacity:1;
+      visibility: visible;
+    }
+    80% {
+      top: 80%;
+      left: 0;
+      transform: rotate(-20deg);
+      opacity:1;
+      visibility: visible;
+    }
+    100% {
+      top: 100%;
+      left: 100%;
+      transform: rotate(0deg);
+      opacity:1;
+      visibility: visible;
+    }
+  }
+  
+  @keyframes fadeOut {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+    }
+  }
+
+  
+  .tip {
+    position: relative;
+    left: 27px;
+    top: 6px;
+    background-color: #000;
+    clip-path: polygon(100% 0, 0 50%, 100% 100%);
+    width: 14px;
+    height: 20px;
+  }
+  
+  .wood {
+    position: relative;
+    bottom: 20px;
+    left: 27px;
+    z-index: 2;
+    width: 60px;
+    height: 72px;
+    background: linear-gradient(to bottom, #f2daad 0%, #d1945c 48%, #ab6b35 83%, #86491d 100%);
+    clip-path: polygon(40px 0, 100% 25%, 100% 75%, 40px 100%, -15px 50%);
+  }
+  
+  .yellow {
+    position: relative;
+    z-index: 4;
+    width: 130px;
+    height: 32px;
+    background-color: #F3B63D;
+    border-top-left-radius: 18px;
+    border-bottom-left-radius: 18px;
+  }
+  
+  .yellow::before,
+  .yellow::after {
+    display: block;
+    content: '';
+    width: 130px;
+    height: 20px;
+    border-top-left-radius: 12px;
+    border-bottom-left-radius: 12px;
+  }
+  
+  .yellow::before {
+    position: relative;
+    bottom: 20px;
+    background-color: #FEE49B;
+  }
+  
+  .yellow::after {
+    position: relative;
+    top: 12px;
+    background: linear-gradient(to bottom, #d28927 0%, #d28927 40%, #ae641c 100%);
+  }
+  
+  .metal {
+    position: relative;
+    bottom: 20px;
+    z-index: 5;
+    width: 45px;
+    height: 72px;
+    background: linear-gradient(to bottom, #b1adad 0%, #fefefe 8%, #fefefe 34%, #a1a0a0 62%, #393536 66%, #8d8989 77%, #aba7a7 91%, #716d6d 100%);
+    border-top-right-radius: 20% 80%;
+    border-bottom-right-radius: 20% 80%;
+    display: flex;
+  }
+  
+  .metal::before,
+  .metal::after {
+    content: '';
+    display: block;
+    width: 2px;
+    height: 72px;
+    background: linear-gradient(to bottom, #8f8d8d 0%, #e8e8e8 8%, #dedede 34%, #8a8a8a 62%, #292727 66%, #6b6868 77%, #999696 91%, #575454 100%);
+    margin-left: 5px;
+  }
+  
+  .eraser {
+    position: relative;
+    bottom: 20px;
+    right: 5px;
+    z-index: 1;
+    width: 45px;
+    height: 72px;
+    background: linear-gradient(to bottom, #ef8865 0%, #b23c26 48%, #a94932 100%);
+    border-top-right-radius: 80%;
+    border-bottom-right-radius: 80%;
+  }
+  
+
+  .landing-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    margin-bottom: 10%;
+    display: flex;
+    flex-direction:column;
+  }
+
+
+#apple {
+    position: absolute;
+    width: 7%; 
+    height: auto;   
+    top: 23%;
+    left: 5%;
+}
+#bee {
+    position: absolute;
+    width: 8%; 
+    height: auto;   
+    top: 50%;
+    left: 5%;
+    transform: rotate(-5deg); 
+}
+
+#plant {
+    position: absolute;
+    width: 5%; 
+    height: auto;   
+    top: 16%;
+    left: 87%;
+    transform: rotate(-10deg); 
+}
+
+#bike{
+    position: absolute;
+    width: 8%; 
+    top: 40%;
+    left: 90%;
+    transform: rotate(10deg); 
+  }
+  #butterfly{
+    position: absolute;
+    width: 8%; 
+    top: 55%;
+    left: 85%;
+    transform: rotate(-10deg); 
+  }
+  #cake{
+    position: absolute;
+    width: 8%; 
+    top: 95%;
+    left: 9%;
+    transform: rotate(5deg); 
+  }
+  
+  #glasses{
+    position: absolute;
+    width: 8%; 
+    top: 83%;
+    left: 11%; 
+  }
+  #icecream{
+    position: absolute;
+    width: 5%; 
+    top: 72%;
+    left: 4%; 
+  }
+
+  #mug{
+    position: absolute;
+    width: 8%; 
+    top: 77%;
+    left: 91%; 
+  }
+  
+  #teddybear{
+    position: absolute;
+    width: 8%; 
+    top: 80%;
+    left: 80%; 
+  }
+
+  #features{
+    background-color: rgb(54,122,196);
+  }
+  
+@keyframes slideInLeft {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOutRight {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOutLeft {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+}
+
+.slide-in-left {
+  animation: slideInLeft 0.5s ease-in-out forwards;
+}
+
+.slide-out-right {
+  animation: slideOutRight 0.5s ease-in-out forwards;
+}
+
+.slide-in-right {
+  animation: slideInRight 0.5s ease-in-out forwards;
+}
+
+.slide-out-left {
+  animation: slideOutLeft 0.5s ease-in-out forwards;
+}
+
+
+  
+  
