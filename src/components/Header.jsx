@@ -1,7 +1,7 @@
 import {Link, useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
 
-const Header = () => {
+const Header = ({ showRules, onRulesClick}) => {
 
     const location = useLocation();
 
@@ -13,6 +13,10 @@ const Header = () => {
             }
         }
     }, [location]);
+
+    const handleRulesClick = () => {
+        onRulesClick(); 
+    };
 
     return (
         <nav className="navbar fixed-top navbar-expand-lg bg-transparent">
@@ -42,6 +46,7 @@ const Header = () => {
                                 </Link>
                             </li>
                         )}
+                        {showRules && <li className="nav-item"><a className="nav-link clickable" onClick={handleRulesClick}>How to play</a></li>}
                     </ul>
                 </div>
             </div>

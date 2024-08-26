@@ -313,6 +313,59 @@
   animation: slideOutLeft 0.5s ease-in-out forwards;
 }
 
+.popup {
+  background-image: url("src/assets/crumpled_paper.jpg");
+  display: flex;
+  flex-direction: column;
+  justify-content:center;
+  align-items:center;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  color: black;
+  transform: translate(-50%, -60%);
+  background-color: #fff;
+  padding: 20px;
+  z-index: 100;
+  min-height: 45vh;
+  min-width: 30vw;
+  border-top-left-radius: 255px 15px;
+  border-top-right-radius: 15px 225px;
+  border-bottom-right-radius: 225px 15px;
+  border-bottom-left-radius:15px 255px;
+  border:solid 3px #41403E;
+  animation: zoomIn 0.3s;
+}
+
+.popup-content {
+  text-align: center;
+  
+}
+
+.close {
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+@keyframes zoomIn {
+  from {
+    transform: translate(-50%, -60%) scale(0);
+  }
+  to {
+    transform: translate(-50%, -60%) scale(1);
+  }
+}
+
+.clickable {
+  cursor: pointer;
+}
+.nav-item:hover{
+  transform: scale(1.2);
+}
+
 
   
   
