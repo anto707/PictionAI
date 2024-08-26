@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Header from "../components/Header"
 import GestureCanvas from "../game/GestureCanvas"
+import Popup from "../components/Popup"
 
 const GamePage = () => {
 
@@ -11,12 +12,20 @@ const GamePage = () => {
   const [gameMode, setGameMode] = useState("handgesture");
   const [gameStarted, setGameStarted] = useState(false);
   const [transitionClass, setTransitionClass] = useState('slide-in-right');
+  const [isPopupVisible, setPopupVisibility] = useState(false);
+  const [popupType, setPopupType] = useState("");
+
+  const handleClosePopup = () => {
+    setPopupVisibility(false);
+    setPopupType("");
+  };
 
   const handleNextStep = () => {
    
     if (currentStep === 2) {
       if (playerNames.length !== numPlayers || playerNames.some(name => !name)) {
-        alert("Please fill in all player names.");
+        setPopupVisibility(true);
+        setPopupType("fillAllNames");
         return;
       }
     }
@@ -49,11 +58,12 @@ const GamePage = () => {
 
   return (
     <>
-      <Header />
-      <div className="text-center d-flex vh-100 justify-content-center align-items-center" id="gameSetup">
+      <Header showRules={gameStarted} onRulesClick={() => {setPopupType("rules"); setPopupVisibility(true);
+        }}  />
+      <div className="text-center d-flex vh-100 w-100 justify-content-center align-items-center" id="gameSetup">
         {gameStarted ? (
           <>
-            <GestureCanvas />
+            <GestureCanvas numPlayers={numPlayers} numRounds={numRounds} playerNames={playerNames} />
           </>
         ) : (
           <div className={transitionClass}>
@@ -166,7 +176,9 @@ const GamePage = () => {
           </div>
         )}
       </div>
+      {isPopupVisible && <Popup onClose={handleClosePopup} type={popupType} />}
     </>
+
   );
   
 };
