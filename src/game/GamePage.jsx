@@ -60,10 +60,10 @@ const GamePage = () => {
     <>
       <Header showRules={gameStarted} onRulesClick={() => {setPopupType("rules"); setPopupVisibility(true);
         }}  />
-      <div className="text-center d-flex vh-100 w-100 justify-content-center align-items-center" id="gameSetup">
+      <div className="text-center d-flex vh-100 w-100 justify-content-center align-items-center pb-4" id="gameSetup">
         {gameStarted ? (
           <>
-            <GestureCanvas numPlayers={numPlayers} numRounds={numRounds} playerNames={playerNames} />
+            <GestureCanvas numPlayers={numPlayers} numRounds={numRounds} playerNames={playerNames} isPopupVisible={isPopupVisible} />
           </>
         ) : (
           <div className={transitionClass}>
@@ -176,7 +176,11 @@ const GamePage = () => {
           </div>
         )}
       </div>
-      {isPopupVisible && <Popup onClose={handleClosePopup} type={popupType} />}
+      {isPopupVisible && 
+      <>
+      <div className="overlay"></div>
+      <Popup onClose={handleClosePopup} type={popupType} />
+      </>}
     </>
 
   );
