@@ -11,7 +11,7 @@ const Landing = () => {
                 <div className='yellow'></div>
                 <div className='metal'></div>
                 <div className='eraser'></div>
-            </div> 
+        </div> 
         <SketchEffect>
         <div className="landing-container justify-content-center align-items-center pt-5">
             <img id="logo" className="pb-md-2" src="src/assets/logo.png" width="70%" alt="logo"></img>

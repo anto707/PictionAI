@@ -1,15 +1,26 @@
 import React, { useRef, useEffect, useState } from 'react';
 import * as hands from '@mediapipe/hands';
 import { Camera } from '@mediapipe/camera_utils';
+import { useNavigate } from 'react-router-dom';
+import categories from '../categories/categories.json';
 
-const GestureCanvas = ({ numPlayers, numRounds, playerNames }) => {
+const GestureCanvas = ({ numPlayers, numRounds, playerNames, isPopupVisible }) => {
   const canvasRef = useRef(null);
   const videoRef = useRef(null);
-  const [isDrawing, setIsDrawing] = useState(false);
-  const [handVisible, setHandVisible] = useState(false); // New state to track hand visibility
+  const isDrawingRef = useRef(false);
+  const [handVisible, setHandVisible] = useState(false);
+  const [isReady, setIsReady] = useState(false);
+
+  // State variables for rounds and players
+  const [currentRound, setCurrentRound] = useState(1);
+  const [currentPlayerIndex, setCurrentPlayerIndex] = useState(0);
+  const [showTransition, setShowTransition] = useState(true); // Set to true initially
+  const [currentCategory, setCurrentCategory] = useState('');
+
+  const navigate = useNavigate();
 
   useEffect(() => {
-    let isMounted = true; // Track if the component is still mounted
+    let isMounted = true;
     const hand = new hands.Hands({
       locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`,
     });
@@ -23,17 +34,16 @@ const GestureCanvas = ({ numPlayers, numRounds, playerNames }) => {
 
     hand.onResults(onResults);
 
-    // Function to start the camera
     async function startCamera() {
       try {
         const stream = await navigator.mediaDevices.getUserMedia({ video: true });
         videoRef.current.srcObject = stream;
 
-        // Initialize MediaPipe Camera
         const cam = new Camera(videoRef.current, {
           onFrame: async () => {
             if (isMounted) {
               await hand.send({ image: videoRef.current });
+              setIsReady(true);
             }
           },
           width: 1000,
@@ -48,26 +58,23 @@ const GestureCanvas = ({ numPlayers, numRounds, playerNames }) => {
 
     startCamera();
 
-    // Function to handle hand landmarks and drawing
     function onResults(results) {
-      if (results.multiHandLandmarks && results.multiHandLandmarks.length > 0) {
-        setHandVisible(true); // Hand is detected
+      if (results.multiHandLandmarks && results.multiHandLandmarks.length > 0 && !isPopupVisible) {
+        setHandVisible(true);
 
         const landmarks = results.multiHandLandmarks[0];
-        const handedness = results.multiHandedness[0].label; // "Right" or "Left"
+        const handedness = results.multiHandedness[0].label;
         const indexFingerTip = landmarks[8];
         const indexFingerMiddle = landmarks[7];
         const thumbTip = landmarks[4];
-        const thumbIP = landmarks[3]; // Thumb Interphalangeal joint
+        const thumbIP = landmarks[3];
 
         const isIndexFingerExtended = indexFingerTip.y < indexFingerMiddle.y;
-
-        // Check if the thumb is extended based on the handedness
         let isThumbExtended = false;
         if (handedness === 'Right') {
-          isThumbExtended = thumbTip.x < thumbIP.x; // Thumb is extended when tip is to the left of the joint
+          isThumbExtended = thumbTip.x < thumbIP.x;
         } else if (handedness === 'Left') {
-          isThumbExtended = thumbTip.x > thumbIP.x; // Thumb is extended when tip is to the right of the joint
+          isThumbExtended = thumbTip.x > thumbIP.x;
         }
 
         const canvas = canvasRef.current;
@@ -77,10 +84,9 @@ const GestureCanvas = ({ numPlayers, numRounds, playerNames }) => {
         const x = (1 - indexFingerTip.x) * canvasWidth;
         const y = indexFingerTip.y * canvasHeight;
 
-        // Draw only if the index finger is extended and the thumb is extended
         if (isIndexFingerExtended && isThumbExtended) {
-          if (!isDrawing) {
-            setIsDrawing(true);
+          if (!isDrawingRef.current) {
+            isDrawingRef.current = true;
             ctx.beginPath();
             ctx.moveTo(x, y);
           } else {
@@ -88,131 +94,150 @@ const GestureCanvas = ({ numPlayers, numRounds, playerNames }) => {
             ctx.stroke();
           }
         } else {
-          setIsDrawing(false);
+          isDrawingRef.current = false;
           ctx.closePath();
         }
       } else {
-        setHandVisible(false); // No hand detected
+        setHandVisible(false);
       }
     }
 
-    // Cleanup function to stop the camera and close MediaPipe hand tracking
+    setCategoryForRound();
+
+    // Initial show transition for the first player of the first round
+    setTimeout(() => {
+      setShowTransition(false); // Hide after showing for a few seconds
+    }, 3000);
+
     return () => {
-      isMounted = false; // Mark as unmounted
+      isMounted = false;
       if (videoRef.current && videoRef.current.srcObject) {
         videoRef.current.srcObject.getTracks().forEach((track) => track.stop());
       }
       hand.close();
     };
-  }, [isDrawing]); // Empty dependency array means this effect runs once on mount and cleanup on unmount
+  }, [isPopupVisible]);
 
-  // Function to clear the drawing on the canvas
   const clearCanvas = () => {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
     ctx.clearRect(0, 0, canvas.width, canvas.height);
   };
 
+  const handleSendDrawing = () => {
+    if (canvasRef.current) {
+      const canvas = canvasRef.current;
+      const saveData = canvas.toDataURL();
+      console.log(saveData);
+    }
+
+    if (currentPlayerIndex === numPlayers - 1) {
+      if (currentRound === numRounds) {
+        alert("Game Over! All rounds completed.");
+        navigate("/");
+        return;
+      }
+
+      setCurrentRound((prevRound) => prevRound + 1);
+      setCurrentPlayerIndex(0);
+    } else {
+      setCurrentPlayerIndex((prevIndex) => prevIndex + 1);
+    }
+    setCategoryForRound();
+    setShowTransition(true);
+    setTimeout(() => {
+      setShowTransition(false);
+    }, 3000);
+  };
+
+  const setCategoryForRound = () => {
+    const category = categories[Math.floor(Math.random() * categories.length)];
+    setCurrentCategory(category);
+  };
+
   return (
-    <div className="flex flex-col items-center justify-center relative mt-5 pt-5">
-      <div style={{ width: '1000px', height: '700px', position: 'relative' }}>
-        <video
-          ref={videoRef}
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            width: '100%',
-            height: '100%',
-            clipPath: 'inset(0 0 150px 0)', // Clip the bottom portion
-            opacity: 0.3,
-            zIndex: 1,
-            transform: 'scaleX(-1)',
-          }}
-          autoPlay
-          playsInline
-          muted
-        />
-        <canvas
-          ref={canvasRef}
-          width={1000}
-          height={700}
-          style={{
-            zIndex: 2,
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            backgroundColor: 'transparent',
-          }}
-        />
-        {/* Message when hand is out of frame */}
+    <div className="mt-5 pt-5">
+      {showTransition && (
+        <div className="transition-screen">
+          <div className='pencil-container'>
+            <div className='tip'></div>
+            <div className='wood'></div>
+            <div className='yellow'></div>
+            <div className='metal'></div>
+            <div className='eraser'></div>
+          </div>
+          <div className="transition-text">
+            {currentPlayerIndex === 0 ? `Round ${currentRound} starting!` : `Round ${currentRound}`} <br />
+            {currentPlayerIndex < numPlayers && numPlayers !== 1 ? `${playerNames[currentPlayerIndex]}'s turn` : ''}
+            <div className="category-display">Draw: {currentCategory}</div>
+          </div>
+        </div>
+      )}
+
+      <div className="canvas-video-container">
+        <video ref={videoRef} autoPlay playsInline muted />
+        <canvas ref={canvasRef} width={1000} height={700} />
         {!handVisible && (
-          <div style={{
-            position: 'absolute',
-            top: '40%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-            backgroundColor: 'rgba(0,0,0,0.7)',
-            color: 'white',
-            padding: '10px 20px',
-            borderRadius: '5px',
-            zIndex: 3,
-          }}>
+          <div className={`hand-visibility-message opacity-${isReady ? 1 : 0}`}>
             Hand not visible! Please move your hand into the frame.
           </div>
         )}
       </div>
 
-      {/* Sticky Note with Text */}
-      <div style={{
-        position: 'absolute',
-        top: 0, // Adjust position as needed
-        right: '10%', // Adjust position as needed
-        zIndex: 4,
-        width: '13%', // Adjust as needed
-        textAlign: 'center',
-      }}>
-        <img
-          style={{
-            width: '100%', // Make the image fit the container width
-            display: 'block',
-          }}
-          src="src/assets/stickynote.png"
-          alt="Sticky Note"
-        />
-        <div
-          style={{
-            position: 'absolute',
-            top: '50%', // Center text vertically
-            left: '50%',
-            transform: 'translate(-50%, -50%)', // Center text horizontally
-            color: 'black', // Ensure text is visible on the image
-            width: '90%', // Adjust to fit within the sticky note
-          }}
-        >
-          <p>{playerNames[0]}'s turn</p>
-          <p>Round 1 of {numRounds}</p>
+      {/* Sticky Note for Round Info */}
+      <div className={`sticky-container round-info py-2 opacity-${isReady ? 1 : 0}`}>
+        <div className="sticky-outer">
+          <div className="sticky">
+            <svg width="0" height="0">
+              <defs>
+                <clipPath id="stickyClip" clipPathUnits="objectBoundingBox">
+                  <path
+                    d="M 0 0 Q 0 0.69, 0.03 0.96 0.03 0.96, 1 0.96 Q 0.96 0.69, 0.96 0 0.96 0, 0 0"
+                    strokeLinejoin="round"
+                    strokeLinecap="square"
+                  />
+                </clipPath>
+              </defs>
+            </svg>
+            <div className="sticky-content">
+              {playerNames[currentPlayerIndex]}'s turn <br />
+              Round {currentRound} of {numRounds}
+            </div>
+          </div>
         </div>
       </div>
 
-      {/* Buttons overlaid on top of the canvas */}
-      <div className="mt-4" style={{ position: 'absolute', top: '86%', left: '50%', transform: 'translateX(-50%)', zIndex: 4 }}>
+      {/* Sticky Note for Category to Draw */}
+      <div className={`sticky-container category-draw py-2 opacity-${isReady ? 1 : 0}`}>
+        <div className="sticky-outer">
+          <div className="sticky">
+            <svg width="0" height="0">
+              <defs>
+                <clipPath id="stickyClip" clipPathUnits="objectBoundingBox">
+                  <path
+                    d="M 0 0 Q 0 0.69, 0.03 0.96 0.03 0.96, 1 0.96 Q 0.96 0.69, 0.96 0 0.96 0, 0 0"
+                    strokeLinejoin="round"
+                    strokeLinecap="square"
+                  />
+                </clipPath>
+              </defs>
+            </svg>
+            <div className="sticky-content">
+              Category to draw: <br />
+              {currentCategory}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className={`buttons mt-4 opacity-${isReady ? 1 : 0}`}>
         <button
           className="btn btn-outline-dark btn-light btn-md mx-2"
-          onClick={() => {
-            if (canvasRef.current) {
-              const canvas = canvasRef.current;
-              const saveData = canvas.toDataURL(); // Example of saving canvas as an image
-              console.log(saveData);
-            }
-          }}
+          onClick={handleSendDrawing}
         >
           Send Drawing
         </button>
-        <button
-          className="btn btn-outline-dark btn-light btn-md"
-          onClick={clearCanvas}
-        >
+        <button className="btn btn-outline-dark btn-light btn-md" onClick={clearCanvas}>
           Clear Drawing
         </button>
       </div>
