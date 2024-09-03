@@ -24,6 +24,7 @@ const GestureCanvas = ({ numPlayers, numRounds, playerNames, isPopupVisible }) =
     const hand = new hands.Hands({
       locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`,
     });
+    
 
     hand.setOptions({
       maxNumHands: 1,
@@ -58,28 +59,13 @@ const GestureCanvas = ({ numPlayers, numRounds, playerNames, isPopupVisible }) =
 
     startCamera();
 
-    const smoothPoints = [];
-    const smoothingFactor = 5; // Number of points to average
-
-    function smoothPoint(x, y) {
-      smoothPoints.push({ x, y });
-      if (smoothPoints.length > smoothingFactor) {
-        smoothPoints.shift(); // Remove the oldest point
-      }
-
-      const avgX = smoothPoints.reduce((sum, point) => sum + point.x, 0) / smoothPoints.length;
-      const avgY = smoothPoints.reduce((sum, point) => sum + point.y, 0) / smoothPoints.length;
-
-      return { x: avgX, y: avgY };
-    }
-
     function onResults(results) {
       if (results.multiHandLandmarks && results.multiHandLandmarks.length > 0 && !isPopupVisible) {
         setHandVisible(true);
 
         const landmarks = results.multiHandLandmarks[0];
         const handedness = results.multiHandedness[0].label;
-        const indexFingerTip = landmarks[8];
+        const indexFingerTip = landmarks[8]; 
         const indexFingerMiddle = landmarks[7];
         const thumbTip = landmarks[4];
         const thumbIP = landmarks[3];
@@ -96,19 +82,8 @@ const GestureCanvas = ({ numPlayers, numRounds, playerNames, isPopupVisible }) =
         const ctx = canvas.getContext('2d');
         const canvasWidth = canvas.width;
         const canvasHeight = canvas.height;
-        const a = (1 - indexFingerTip.x) * canvasWidth;
-        const b = indexFingerTip.y * canvasHeight;
-
-        const { x, y } = smoothPoint(a, b);
-
-        if (handVisible) {
-          // Draw a small circle at the index fingertip position
-          ctx.beginPath();
-          ctx.arc(x, y, 5, 0, Math.PI * 2);
-          ctx.fillStyle = 'red';
-          ctx.fill();
-          ctx.closePath();
-        }
+        const x = (1 - indexFingerTip.x) * canvasWidth;
+        const y = indexFingerTip.y * canvasHeight;
 
         if (isIndexFingerExtended && isThumbExtended) {
           if (!isDrawingRef.current) {
@@ -123,7 +98,6 @@ const GestureCanvas = ({ numPlayers, numRounds, playerNames, isPopupVisible }) =
           isDrawingRef.current = false;
           ctx.closePath();
         }
-
       } else {
         setHandVisible(false);
       }
@@ -156,7 +130,6 @@ const GestureCanvas = ({ numPlayers, numRounds, playerNames, isPopupVisible }) =
       const canvas = canvasRef.current;
       const saveData = canvas.toDataURL();
       console.log(saveData);
-      clearCanvas();
     }
 
     if (currentPlayerIndex === numPlayers - 1) {

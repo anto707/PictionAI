@@ -550,6 +550,30 @@
   z-index: 3;
 }
 
+.nose-visibility-message {
+  position: absolute;
+  top: 33%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(0,0,0,0.7);
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+  z-index: 3;
+}
+
+.chin-visibility-message {
+  position: absolute;
+  top: 33%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(0,0,0,0.7);
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+  z-index: 3;
+}
+
 .buttons {
   position: absolute;
   top: 86%; 
