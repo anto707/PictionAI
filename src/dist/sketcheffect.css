@@ -1,0 +1,19 @@
+.sketch-container {
+    position: relative;
+    overflow: hidden;
+    width: 100%; 
+    height: auto; 
+    animation: sketchEffect 5.5s ease-in-out forwards;
+    clip-path: inset(0 100% 0 0);
+    animation-play-state: paused; 
+  }
+  
+  @keyframes sketchEffect {
+    0% {
+      clip-path: inset(0 0 100% 0);
+    }
+    100% {
+      clip-path: inset(0 0 0 0);
+    }
+  }
+  
