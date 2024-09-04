@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import Header from "../components/Header"
 import GestureCanvas from "../game/GestureCanvas"
+import NoseCanvas from "../game/NoseCanvas"
+import ChinCanvas from "../game/ChinCanvas"
 import Popup from "../components/Popup"
 
 const GamePage = () => {
@@ -10,7 +12,9 @@ const GamePage = () => {
   const [playerNames, setPlayerNames] = useState([]);
   const [numRounds, setNumRounds] = useState(3);
   const [gameMode, setGameMode] = useState("handgesture");
-  const [gameStarted, setGameStarted] = useState(false);
+  const [gameHandStarted, setGameHandStarted] = useState(false);
+  const [gameNoseStarted, setGameNoseStarted] = useState(false);
+  const [gameChinStarted, setGameChinStarted] = useState(false);
   const [transitionClass, setTransitionClass] = useState('slide-in-right');
   const [isPopupVisible, setPopupVisibility] = useState(false);
   const [popupType, setPopupType] = useState("");
@@ -52,20 +56,51 @@ const GamePage = () => {
     setPlayerNames(newPlayerNames);
   };
 
-  const startGame = () => {
-    setGameStarted(true);
+  const startGameHand = () => {
+    setGameHandStarted(true);
+  };
+
+  const startGameNose = () => {
+    setGameNoseStarted(true);
+  };
+
+  const startGameChin = () => {
+    setGameChinStarted(true);
   };
 
   return (
     <>
-      <Header showRules={gameStarted} onRulesClick={() => {setPopupType("rules"); setPopupVisibility(true);
+      <Header showRules={gameHandStarted || gameNoseStarted || gameChinStarted} onRulesClick={() => {setPopupType("rules"); setPopupVisibility(true);
         }}  />
       <div className="text-center d-flex vh-100 w-100 justify-content-center align-items-center pb-4" id="gameSetup">
-        {gameStarted ? (
+        {gameHandStarted ? (
           <>
-            <GestureCanvas numPlayers={numPlayers} numRounds={numRounds} playerNames={playerNames} isPopupVisible={isPopupVisible} />
+            <GestureCanvas 
+              numPlayers={numPlayers} 
+              numRounds={numRounds} 
+              playerNames={playerNames} 
+              isPopupVisible={isPopupVisible} />
           </>
-        ) : (
+        ) : 
+        gameNoseStarted ?  (
+          <>
+            <NoseCanvas
+              numPlayers={numPlayers}
+              numRounds={numRounds}
+              playerNames={playerNames}
+              isPopupVisible={isPopupVisible}/>
+          </>
+        ) :
+        gameChinStarted ?  (
+          <>
+            <ChinCanvas
+              numPlayers={numPlayers}
+              numRounds={numRounds}
+              playerNames={playerNames}
+              isPopupVisible={isPopupVisible}/>
+          </>
+        ) :
+        (
           <div className={transitionClass}>
             {currentStep === 1 && (
               <div>
@@ -152,14 +187,15 @@ const GamePage = () => {
                 <h1>Choose game mode</h1>
                 <select
                   value={gameMode}
-                  onChange={setGameMode}
+                  onChange={(e) => setGameMode(e.target.value)}
                   style={{ textAlign: 'center', fontSize: '24px', padding: '10px', width: '200px' }}
                 >
                   <option value="handgesture">Hand Gesture</option>
-                </select>
+                  <option value="nosetracking">Nose Tracking</option>
+                  <option value="chintracking">Chin Tracking</option>                </select>
                 <br />
                 <button
-                  onClick={startGame}
+                  onClick={gameMode === 'handgesture' ? startGameHand : gameMode === 'nosetracking' ? startGameNose : gameMode === 'chintracking' ? startGameChin : null}
                   className="btn btn-outline-dark btn-light btn-lg mt-3"
                 >
                   Start Game
