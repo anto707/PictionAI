@@ -110,6 +110,7 @@ const GestureCanvas = ({ numPlayers, numRounds, playerNames, isPopupVisible }) =
     const hand = new hands.Hands({
       locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`,
     });
+    
 
     hand.setOptions({
       maxNumHands: 1,
@@ -144,21 +145,6 @@ const GestureCanvas = ({ numPlayers, numRounds, playerNames, isPopupVisible }) =
 
     startCamera();
 
-    const smoothPoints = [];
-    const smoothingFactor = 5; // Number of points to average
-
-    function smoothPoint(x, y) {
-      smoothPoints.push({ x, y });
-      if (smoothPoints.length > smoothingFactor) {
-        smoothPoints.shift(); // Remove the oldest point
-      }
-
-      const avgX = smoothPoints.reduce((sum, point) => sum + point.x, 0) / smoothPoints.length;
-      const avgY = smoothPoints.reduce((sum, point) => sum + point.y, 0) / smoothPoints.length;
-
-      return { x: avgX, y: avgY };
-    }
-
     function onResults(results) {
       const dotCanvas = dotCanvasRef.current;
       const dotCtx = dotCanvas.getContext('2d');
@@ -171,7 +157,7 @@ const GestureCanvas = ({ numPlayers, numRounds, playerNames, isPopupVisible }) =
 
         const landmarks = results.multiHandLandmarks[0];
         const handedness = results.multiHandedness[0].label;
-        const indexFingerTip = landmarks[8];
+        const indexFingerTip = landmarks[8]; 
         const indexFingerMiddle = landmarks[7];
         const thumbTip = landmarks[4];
         const thumbIP = landmarks[3];
@@ -188,6 +174,7 @@ const GestureCanvas = ({ numPlayers, numRounds, playerNames, isPopupVisible }) =
         const ctx = canvas.getContext('2d');
         const canvasWidth = canvas.width;
         const canvasHeight = canvas.height;
+
         const a = (1 - indexFingerTip.x) * canvasWidth;
         const b = indexFingerTip.y * canvasHeight;
 
