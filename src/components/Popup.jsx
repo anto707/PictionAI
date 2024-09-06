@@ -67,7 +67,7 @@ const Popup = ({ onClose, type, gameMode }) => {
             <div className="mt-3">
               <figure className="px-2">
                 <img
-                  src={"src/assets/nose.gif"}
+                  src={"src/assets/nosedraw.gif"}
                   width="50%"
                   alt="Drawing with nose"
                 />

@@ -133,7 +133,7 @@ const Features = () => {
             </section>
             <section id="note4" className="note note4">
               <h1>Nose Mode</h1>
-              <img src="http://www.placehold.it/500x200" alt="Nose Mode" />
+              <img src="src/assets/nosedraw.gif" alt="Nose Mode" />
             </section>
             <section id="note5" className="note note5">
               <img src={"src/assets/chindraw.gif"} alt="Chin Mode" />
