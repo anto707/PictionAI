@@ -158,7 +158,7 @@ const Canvas = ({
     let faceMesh;
     let cam;
 
-    if (modality != "mouse") {
+    if (modality !== "mouse") {
       let isMounted = true;
       hand = new hands.Hands({
         locateFile: (file) =>
@@ -174,7 +174,7 @@ const Canvas = ({
 
       hand.onResults(onResultsHands);
 
-      if (modality == "chin" || modality == "nose") {
+      if (modality === "chin" || modality === "nose") {
         faceMesh = new FaceMesh({
           locateFile: (file) =>
             `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/${file}`,
@@ -222,7 +222,7 @@ const Canvas = ({
             onFrame: async () => {
               if (isMounted) {
                 await hand.send({ image: videoRef.current });
-                if (modality == "chin" || modality == "nose") {
+                if (modality === "chin" || modality === "nose") {
                   await faceMesh.send({ image: videoRef.current });
                 }
                 setIsReady(true);
@@ -260,7 +260,7 @@ const Canvas = ({
       }
 
       function onResultsHands(results) {
-        if (modality == "hand") {
+        if (modality === "hand") {
           const dotCanvas = dotCanvasRef.current;
           const dotCtx = dotCanvas.getContext("2d");
 
@@ -312,7 +312,6 @@ const Canvas = ({
               if (drawingModeRef.current) {
                 // Drawing mode
                 ctx.globalCompositeOperation = "source-over";
-
                 ctx.lineWidth = 2;
                 ctx.lineJoin = "round";
                 ctx.lineCap = "round";
@@ -344,21 +343,14 @@ const Canvas = ({
             // Clear dot canvas when the hand is not visible
             dotCtx.clearRect(0, 0, dotCanvas.width, dotCanvas.height);
           }
-        } else if (modality == "chin" || modality == "nose") {
+        } else if (modality === "chin" || modality === "nose") {
           if (
             results.multiHandLandmarks &&
             results.multiHandLandmarks.length > 0 &&
             !isPopupVisible
           ) {
             setHandVisible(true);
-
-            const canvas = canvasRef.current;
-            const ctx = canvas.getContext("2d");
-
-            if (!handVisible) {
-              isDrawingRef.current = false;
-              ctx.closePath();
-            }
+            isDrawingRef.current = false;
           } else {
             setHandVisible(false);
           }
@@ -378,10 +370,10 @@ const Canvas = ({
           !showTransition
         ) {
           let x, y;
-          if (modality == "chin") {
+          if (modality === "chin") {
             setChinVisible(true);
             ({ x, y } = results.multiFaceLandmarks[0][152]);
-          } else if (modality == "nose") {
+          } else if (modality === "nose") {
             setNoseVisible(true);
             ({ x, y } = results.multiFaceLandmarks[0][1]);
           }
@@ -400,45 +392,33 @@ const Canvas = ({
           dotCtx.fillStyle = "red";
           dotCtx.fill();
 
-          if (x) {
-            if (drawingModeRef.current) {
-              ctx.globalCompositeOperation = "source-over";
-              ctx.lineWidth = 2;
-              ctx.lineJoin = "round";
-              ctx.lineCap = "round";
-              ctx.strokeStyle = "black";
-              ctx.filter = "blur(0.5px)";
+          if (drawingModeRef.current) {
+            ctx.globalCompositeOperation = "source-over";
+            ctx.lineWidth = 2;
+            ctx.lineJoin = "round";
+            ctx.lineCap = "round";
+            ctx.strokeStyle = "black";
+            ctx.filter = "blur(0.5px)";
 
-              if (!isDrawingRef.current) {
-                isDrawingRef.current = true;
-                ctx.beginPath();
-                ctx.moveTo(smoothX, smoothY);
-              } else {
-                ctx.lineTo(smoothX, smoothY);
-                ctx.stroke();
-              }
-            } else {
-              ctx.globalCompositeOperation = "destination-out";
-              ctx.lineWidth = 15;
+            if (!isDrawingRef.current) {
+              isDrawingRef.current = true;
               ctx.beginPath();
-              ctx.arc(
-                smoothX,
-                smoothY,
-                ctx.lineWidth / 2,
-                0,
-                Math.PI * 2,
-                false
-              );
-              ctx.fill();
+              ctx.moveTo(smoothX, smoothY);
+            } else {
+              ctx.lineTo(smoothX, smoothY);
+              ctx.stroke();
             }
           } else {
-            isDrawingRef.current = false;
-            ctx.closePath();
+            ctx.globalCompositeOperation = "destination-out";
+            ctx.lineWidth = 15;
+            ctx.beginPath();
+            ctx.arc(smoothX, smoothY, ctx.lineWidth / 2, 0, Math.PI * 2, false);
+            ctx.fill();
           }
         } else {
-          if (modality == "chin") {
+          if (modality === "chin") {
             setChinVisible(false);
-          } else if (modality == "nose") {
+          } else if (modality === "nose") {
             setNoseVisible(false);
           }
           dotCtx.clearRect(0, 0, dotCanvas.width, dotCanvas.height);
@@ -453,6 +433,9 @@ const Canvas = ({
             .forEach((track) => track.stop());
         }
         hand.close();
+        if (modality === "chin" || modality === "nose") {
+          faceMesh.close();
+        }
         if (cam) {
           cam.stop();
         }
@@ -761,7 +744,7 @@ const Canvas = ({
       )}
 
       <div className="canvas-video-container">
-        {modality != "mouse" && (
+        {modality !== "mouse" && (
           <video
             className="object-fit-cover"
             ref={videoRef}
@@ -769,31 +752,31 @@ const Canvas = ({
             playsInline
             muted
           />
-        )}
+        )}{" "}
         <canvas
           className={`drawingCanvas ${
             modality !== "mouse" ? "object-fit-cover" : ""
           }`}
           ref={canvasRef}
         />
-        {modality != "mouse" && (
+        {modality !== "mouse" && (
           <canvas
             className="dotCanvas object-fit-cover"
             ref={dotCanvasRef}
             style={{ position: "absolute", top: 0, left: 0, zIndex: 2 }}
           />
         )}
-        {!handVisible && modality == "hand" && (
+        {!handVisible && modality === "hand" && (
           <div className={`visibility-message opacity-${isReady ? 1 : 0}`}>
             Hand not visible! Please move your hand into the frame.
           </div>
         )}
-        {!chinVisible && modality == "chin" && (
+        {!chinVisible && modality === "chin" && (
           <div className={`visibility-message opacity-${isReady ? 1 : 0}`}>
             Chin not visible! Please move your face into the frame.
           </div>
         )}
-        {!noseVisible && modality == "nose" && (
+        {!noseVisible && modality === "nose" && (
           <div className={`visibility-message opacity-${isReady ? 1 : 0}`}>
             Nose not visible! Please move your face into the frame.
           </div>

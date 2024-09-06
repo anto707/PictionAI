@@ -1,0 +1,270 @@
+/* General Styles */
+.note-container {
+    position: relative;
+    width: 100%;
+    z-index: 1;
+    height: auto; /* Default height */
+}
+
+.note {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: white;
+    width: 70%;
+    min-height: 200px;
+    padding: 20px;
+    backface-visibility: hidden;
+    z-index: 0;
+    box-shadow: 10px 1px 7px rgba(0, 0, 0, 0.65);
+}
+
+.note::before,
+.note::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 25px;
+    background: url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/23618/rip.svg) bottom;
+    background-size: 200%;
+    z-index: -1;
+}
+
+.note::before {
+    top: -20px;
+    background-position: bottom;
+    transform: scaleY(-1);
+}
+
+.note::after {
+    top: 98%;
+    background-position: bottom;
+    filter: drop-shadow(2px 5px 2px rgba(0, 0, 0, 0.65));
+}
+
+.note1 {
+    left: 35vw;
+    top: 0vh;
+    height: 40vh;
+    z-index: 10;
+    transform: rotateZ(-3deg);
+    transition: all 0.5s ease-out 0.3s;
+}
+
+.note2 {
+    left: 36vw;
+    top: -45vh;
+    z-index: 9;
+    transition: all 0.5s ease-out 0.15s;
+}
+
+.note3 {
+    left: 33vw;
+    top: -95vh;
+    z-index: 8;
+    transform: rotateZ(3deg);
+    transition: all 0.5s ease-out;
+}
+
+.note4 {
+    left: 34vw;
+    top: -130vh;
+    z-index: 7;
+    transform: rotateZ(3deg);
+    transition: all 0.5s ease-out;
+}
+
+.note5 {
+    left: 37vw;
+    top: -173vh;
+    z-index: 6;
+    transform: rotateZ(3deg);
+    transition: all 0.5s ease-out;
+}
+
+/* Hover effect on the container - Large screens only */
+@media (min-width: 550px) {
+    .note-container:hover,
+    .note-container.hover {
+        .note {
+            opacity: 0.9;
+            transform: scale(0.95);
+        }
+        .note1 {
+            transform: rotateZ(0deg) scale(0.95);
+            height: 20vh;
+        }
+        .note2 {
+            left: 22vw;
+            top: -45vh;
+        }
+        .note3 {
+            left: 55vw;
+            top: -95vh;
+        }
+        .note4 {
+            top: -150vh;
+            left: 34vw;
+        }
+        .note5 {
+            top: -140vh;
+            left: 37vw;
+        }
+    }
+}
+
+/* Hover effect on individual notes */
+.note:hover,
+.note.hover {
+    opacity: 1;
+    z-index: 11;
+    transform: scale(1);
+}
+
+img {
+    max-width: 100%;
+}
+
+/* Media Queries */
+
+/* Very Small Screens - Stack notes vertically, disable hover, and increase height */
+@media (max-width: 549px) {
+    .note-container {
+        width: 100%;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        height: 800vh; /* Increase height on small screens */
+    }
+
+    /* Disable hover effect on the container for small screens */
+    .note-container:hover,
+    .note-container.hover {
+        .note {
+            opacity: 1;
+            transform: scale(1);
+            z-index: auto;
+        }
+    }
+
+    .note1,
+    .note2,
+    .note3,
+    .note4,
+    .note5 {
+        width: 60%;
+        margin-bottom: 10px;
+        left: 0;
+        top: auto;
+        height: 15vh;
+        transform: rotateZ(0deg);
+        transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+    }
+
+    .note1 {
+        margin-top: 10px;
+    }
+
+    .note2,
+    .note3,
+    .note4,
+    .note5 {
+        margin-top: 10px;
+    }
+}
+
+/* Medium Screens */
+@media (min-width: 550px) and (max-width: 879px) {
+    .note-container {
+        width: 70%;
+        height: auto; /* Restore auto height */
+    }
+
+    .note1 {
+        left: 30vw;
+    }
+
+    .note2 {
+        left: 31vw;
+    }
+
+    .note3 {
+        left: 28vw;
+    }
+
+    .note4 {
+        left: 29vw;
+    }
+
+    .note5 {
+        left: 32vw;
+    }
+}
+
+/* Large Screens */
+@media (min-width: 880px) and (max-width: 1199px) {
+    .note-container {
+        width: 60%;
+        height: auto; /* Restore auto height */
+    }
+
+    .note1 {
+        left: 32vw;
+    }
+
+    .note2 {
+        left: 33vw;
+    }
+
+    .note3 {
+        left: 30vw;
+    }
+
+    .note4 {
+        left: 31vw;
+    }
+
+    .note5 {
+        left: 34vw;
+    }
+}
+
+/* Extra Large Screens - For very large desktops */
+@media (min-width: 1024px) {
+    .note-container {
+        width: 42%;
+        height: auto; /* Restore auto height */
+    }
+
+    .note-container:hover,
+    .note-container.hover {
+        .note {
+            opacity: 0.9;
+            transform: scale(0.95);
+        }
+        .note1 {
+            transform: rotateZ(0deg) scale(0.95);
+            height: 20vh;
+        }
+        .note2 {
+            left: 20vw;
+            top: -45vh;
+        }
+        .note3 {
+            left: 55vw;
+            top: -95vh;
+        }
+        .note4 {
+            top: -165vh;
+            left: 34vw;
+        }
+        .note5 {
+            top: -148vh;
+            left: 37vw;
+        }
+    }
+}
