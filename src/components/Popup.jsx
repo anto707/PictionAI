@@ -58,6 +58,25 @@ const Popup = ({ onClose, type, gameMode }) => {
         return (
           <>
             <h4 className="mt-3">Nose Mode</h4>
+            <p>
+              Draw using the tip of your nose by moving it and keeping it visible in
+              the frame. To make different strokes, bring your hand in the
+              frame.
+            </p>
+
+            <div className="mt-3">
+              <figure className="px-2">
+                <img
+                  src={"src/assets/nose.gif"}
+                  width="50%"
+                  alt="Drawing with nose"
+                />
+                <figcaption>
+                  Drawing with your nose: the stroke pauses when both your face
+                  and hand are in the frame.
+                </figcaption>
+              </figure>
+            </div>
           </>
         );
       case "chin":
@@ -65,7 +84,7 @@ const Popup = ({ onClose, type, gameMode }) => {
           <>
             <h4 className="mt-3">Chin Mode</h4>
             <p>
-              Draw using your chin finger by moving it and keeping it visible in
+              Draw using your chin by moving it and keeping it visible in
               the frame. To make different strokes, bring your hand in the
               frame.
             </p>
