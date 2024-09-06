@@ -19,8 +19,15 @@
     margin-top: 10%;
 }
 
+.landing-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}
+
 .pencil-container {
-    position: fixed;
+    position: absolute; 
     top: 0;
     left: 0;
     opacity: 0;
@@ -265,8 +272,12 @@
 
   #features{
     background-color: rgb(54,122,196);
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
   
+
 @keyframes slideInLeft {
   from {
     transform: translateX(-100%);
@@ -328,7 +339,6 @@
 }
 
 .popup {
-  
   display: flex;
   flex-direction: column;
   justify-content:center;
@@ -435,7 +445,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  font-size: 0.875rem;
+  font-size: 1.1rem;
   clip-path: url(#stickyClip);
   transition: transform 0.3s ease;
 }
@@ -736,3 +746,46 @@
   font-size: 12px;
   white-space: nowrap;
 }
+
+.fade-in-section {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.fade-in-section.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+.paper {
+  max-width: 20%!important;
+  max-height: 30%;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.ruled {
+  background-color: rgb(245, 245, 220);
+  background-image: repeating-linear-gradient(transparent 0, transparent 1em, skyblue 0, skyblue 1.1em);
+  &::after {
+      content: "";
+      position: absolute;
+      left: 1.5rem;
+      top: 0;
+      height: 100%;
+      width: .1rem;
+      border-color: rgba(220, 0, 0, 0.5);
+      border-style: solid;
+      border-width: 0 .1rem 0 .1rem;
+  }
+}
+
+.animate-sketch {
+  animation: sketchFromLeft 3s ease-in-out forwards;
+}
+
+
+
