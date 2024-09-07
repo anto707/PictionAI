@@ -196,7 +196,7 @@ const GamePage = () => {
                   <option value="mouse">Mouse (easy)</option>
                   <option value="hand">Hand Gesture (medium)</option>
                   <option value="nose">Nose (hard) </option>
-                  <option value="chin">Chin (hard) </option>
+                  <option value="chin">Chin (very hard) </option>
                 </select>
                 <br />
                 <button

@@ -804,7 +804,7 @@ const Canvas = ({
       >
         <StickyNote>
           Category to draw: <br />
-          {currentCategory}
+          <strong>{currentCategory.toUpperCase()}</strong>
           <div className="mt-2">
             <button
               data-tooltip-id="draw-btn"
