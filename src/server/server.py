@@ -56,7 +56,6 @@ def base64_to_pil(base64_string: str) -> Image:
             
             # Bounding box of the non-white areas
             bbox = inverted_mask.getbbox()
-            logger.info(bbox)
             
             # Crop to the bounding box
             if bbox:
