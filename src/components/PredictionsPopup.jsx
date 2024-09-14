@@ -25,7 +25,7 @@ const PredictionsPopup = ({
     // Timer to show probabilities after bars have finished expanding
     const probabilitiesTimer = setTimeout(() => {
       setShowProbabilities(true);
-    }, 3500); // Adjust the timing to match the transition duration (3s) + some buffer
+    }, 3500);
 
     return () => {
       clearTimeout(timer);

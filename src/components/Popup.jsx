@@ -9,11 +9,11 @@ const Popup = ({ onClose, type, gameMode }) => {
       case "hand":
         return (
           <>
-            <h4 className="mt-3">Gesture Mode</h4>
+            <h4 className="mt-3">Hand Modality</h4>
             <p>
-              Draw using your index finger while keeping all fingers extended
-              and visible in the frame. To make different strokes, close your
-              thumb while drawing.
+              Draw using your index finger while keeping the thumb extended and
+              in the frame. To make different strokes, close your thumb while
+              drawing.
             </p>
 
             <div className="mt-3">
@@ -24,7 +24,7 @@ const Popup = ({ onClose, type, gameMode }) => {
                   alt="Drawing with index finger"
                 />
                 <figcaption>
-                  Drawing with index finger, all fingers extended.
+                  Drawing with index finger, thumb is extended.
                 </figcaption>
               </figure>
               <figure className="px-2">
@@ -41,7 +41,7 @@ const Popup = ({ onClose, type, gameMode }) => {
       case "mouse":
         return (
           <>
-            <h4 className="mt-3">Mouse Mode</h4>
+            <h4 className="mt-3">Mouse Modality</h4>
             <p>
               Use your mouse / touchpad to draw on the screen. Click and drag to
               create strokes.
@@ -57,11 +57,11 @@ const Popup = ({ onClose, type, gameMode }) => {
       case "nose":
         return (
           <>
-            <h4 className="mt-3">Nose Mode</h4>
+            <h4 className="mt-3">Nose Modality</h4>
             <p>
-              Draw using the tip of your nose by moving it and keeping it visible in
-              the frame. To make different strokes, bring your hand in the
-              frame.
+              Draw using the tip of your nose by moving it and keeping it
+              visible in the frame. To make different strokes, bring your hand
+              in the frame.
             </p>
 
             <div className="mt-3">
@@ -82,9 +82,9 @@ const Popup = ({ onClose, type, gameMode }) => {
       case "chin":
         return (
           <>
-            <h4 className="mt-3">Chin Mode</h4>
+            <h4 className="mt-3">Chin Modality</h4>
             <p>
-              Draw using your chin by moving it and keeping it visible in
+              Draw using your chin finger by moving it and keeping it visible in
               the frame. To make different strokes, bring your hand in the
               frame.
             </p>

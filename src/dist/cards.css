@@ -3,7 +3,7 @@
     position: relative;
     width: 100%;
     z-index: 1;
-    height: auto; /* Default height */
+    height: auto; 
 }
 
 .note {
@@ -85,7 +85,7 @@
     transition: all 0.5s ease-out;
 }
 
-/* Hover effect on the container - Large screens only */
+/* Hover effect on the container in large screens only */
 @media (min-width: 550px) {
     .note-container:hover,
     .note-container.hover {
@@ -130,7 +130,7 @@ img {
 
 /* Media Queries */
 
-/* Very Small Screens - Stack notes vertically, disable hover, and increase height */
+/* Very small screens - stack notes vertically */
 @media (max-width: 549px) {
     .note-container {
         width: 100%;
@@ -177,11 +177,11 @@ img {
     }
 }
 
-/* Medium Screens */
+/* Medium screens */
 @media (min-width: 550px) and (max-width: 879px) {
     .note-container {
         width: 70%;
-        height: auto; /* Restore auto height */
+        height: auto; 
     }
 
     .note1 {
@@ -205,11 +205,11 @@ img {
     }
 }
 
-/* Large Screens */
+/* Large screens */
 @media (min-width: 880px) and (max-width: 1199px) {
     .note-container {
         width: 60%;
-        height: auto; /* Restore auto height */
+        height: auto; 
     }
 
     .note1 {
@@ -233,11 +233,11 @@ img {
     }
 }
 
-/* Extra Large Screens - For very large desktops */
+/* Extra large screens*/
 @media (min-width: 1024px) {
     .note-container {
         width: 42%;
-        height: auto; /* Restore auto height */
+        height: auto; 
     }
 
     .note-container:hover,
@@ -259,7 +259,7 @@ img {
             top: -95vh;
         }
         .note4 {
-            top: -165vh;
+            top: -160vh;
             left: 34vw;
         }
         .note5 {
