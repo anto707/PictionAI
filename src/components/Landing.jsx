@@ -13,7 +13,7 @@ const Landing = () => {
           <div className="eraser"></div>
         </div>
         <SketchEffect>
-          <div className="landing-container justify-content-center align-items-center mt-4">
+          <div className="landing-container justify-content-center align-items-center">
             <img
               id="logo"
               className="pb-md-2"

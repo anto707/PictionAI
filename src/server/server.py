@@ -17,7 +17,7 @@ logger.setLevel(logging.INFO)
 # CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],  # Adjust according to your front-end setup
+    allow_origins=["http://localhost:5173"], 
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -32,39 +32,19 @@ model = AutoModelForImageClassification.from_pretrained(MODEL_NAME)
 
 def base64_to_pil(base64_string: str) -> Image:
     try:
-        # Decode base64 and convert to a PIL image
+        # Decode base64 and convert to PIL image
         image_data = base64.b64decode(base64_string)
         pil_image = Image.open(io.BytesIO(image_data)).convert('RGBA')
-        
-        # Check if image has transparency
+
+        #Bound the drawing using alpha channel
         alpha_channel = pil_image.getchannel('A')
-        has_transparency = alpha_channel.getextrema()[0] < 255 or alpha_channel.getextrema()[1] < 255
-        
-        if has_transparency:
-            # Crop image based on alpha channel
-            bbox = alpha_channel.getbbox()
-            if bbox:
-                pil_image = pil_image.crop(bbox)
-        else:
-            # Crop based on white background for images without transparency (mouse modality)
-
-            grayscale = pil_image.convert("L")
-
-            binary_mask = grayscale.point(lambda p: 0 if p < 240 else 255)
-
-            inverted_mask = Image.eval(binary_mask, lambda x: 255 - x)
-            
-            # Bounding box of the non-white areas
-            bbox = inverted_mask.getbbox()
-            
-            # Crop to the bounding box
-            if bbox:
-                pil_image = pil_image.crop(bbox)
+        bbox = alpha_channel.getbbox()
+        pil_image = pil_image.crop(bbox)
 
 
-        # Create a white background and paste the cropped image onto it
+        # Create a white background and paste cropped image onto it
         background = Image.new("RGB", pil_image.size, (255, 255, 255))
-        background.paste(pil_image, mask=pil_image.split()[3])  # Use alpha channel as mask
+        background.paste(pil_image, mask=pil_image.split()[3]) 
         
         return background
 
@@ -90,22 +70,17 @@ async def predict(request: Request):
         except ValueError:
             return JSONResponse(content={"error": "Invalid image data"}, status_code=400)
 
-        # Resize image to the expected size if necessary
-        if pil_image.size != IMAGE_SIZE:
-            pil_image = pil_image.resize(IMAGE_SIZE)
+        # Resize image
+        pil_image = pil_image.resize(IMAGE_SIZE)
 
-        # Save the image for debugging
-        image_path = os.path.join(os.getcwd(), "output.png")
-        pil_image.save(image_path)
-
-        # Preprocess the image
+        # Preprocess image
         inputs = processor(pil_image, return_tensors="pt")
 
-        # Make the prediction
+        # Predictions
         with torch.no_grad():
             outputs = model(**inputs)
 
-        # Compute softmax probabilities
+        # Softmax probabilities
         probabilities = torch.softmax(outputs.logits, dim=-1)[0]
 
         # Get top 4 predictions

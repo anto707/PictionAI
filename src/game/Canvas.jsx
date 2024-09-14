@@ -42,7 +42,7 @@ const Canvas = ({
   // State variables for rounds and players
   const [currentRound, setCurrentRound] = useState(1);
   const [currentPlayerIndex, setCurrentPlayerIndex] = useState(0);
-  const [showTransition, setShowTransition] = useState(true); // Set to true initially
+  const [showTransition, setShowTransition] = useState(true);
   const [currentCategory, setCurrentCategory] = useState("");
   const [predictions, setPredictions] = useState([]);
   const [scores, setScores] = useState(Array(numPlayers).fill(0));
@@ -247,7 +247,7 @@ const Canvas = ({
       function smoothPoint(x, y) {
         smoothPoints.push({ x, y });
         if (smoothPoints.length > smoothingFactor) {
-          smoothPoints.shift(); // Remove the oldest point
+          smoothPoints.shift(); // Remove oldest point
         }
 
         const avgX =
@@ -470,18 +470,12 @@ const Canvas = ({
         const container = canvas.parentElement;
         canvas.width = container.clientWidth;
         canvas.height = container.clientHeight;
-        ctx.fillStyle = "white";
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
       };
 
-      // Initial update of canvas size
       updateCanvasSize();
 
       // Adjust canvas size on window resize
       window.addEventListener("resize", updateCanvasSize);
-
-      ctx.fillStyle = "white";
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
 
       setIsReady(true);
 
@@ -521,6 +515,7 @@ const Canvas = ({
         const scaleY = canvas.height / canvas.clientHeight;
 
         if (drawingModeRef.current) {
+          ctx.globalCompositeOperation = "source-over";
           ctx.strokeStyle = "black";
           ctx.lineJoin = "round";
           ctx.lineCap = "round";
@@ -529,7 +524,7 @@ const Canvas = ({
           ctx.lineTo(x * scaleX, y * scaleY);
           ctx.stroke();
         } else {
-          ctx.strokeStyle = "white";
+          ctx.globalCompositeOperation = "destination-out";
           ctx.lineWidth = 15;
           ctx.beginPath();
           ctx.arc(
@@ -580,10 +575,7 @@ const Canvas = ({
     ctx.closePath();
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    if (modality === "mouse") {
-      ctx.fillStyle = "white";
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-    } else {
+    if (modality !== "mouse") {
       const dotCanvas = dotCanvasRef.current;
       const dotCtx = dotCanvas.getContext("2d");
       dotCtx.clearRect(0, 0, dotCanvas.width, dotCanvas.height);
@@ -598,13 +590,9 @@ const Canvas = ({
       const data = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
 
       const isCanvasEmpty = !data.some((value) => value !== 0);
-      const isCanvasWhite = !data.some((value, index) => {
-        if (index % 4 === 0) return false; // Skip red channel
-        return value !== 255; // If any RGB channel value is not 255, it's not white
-      });
 
-      if (isCanvasEmpty || isCanvasWhite) {
-        // If canvas is empty, skip to the next round
+      if (isCanvasEmpty) {
+        // If canvas is empty, skip to next round
         handleClosePredictionsPopup();
         return;
       }
@@ -650,7 +638,7 @@ const Canvas = ({
             }
           }
 
-          setCurrentRoundScore(points.toFixed(2)); // Set points for this round, fixed to 2 decimal places for readability
+          setCurrentRoundScore(points.toFixed(2)); // Set points for this round
 
           // Update the score for the current player
           setScores((prevScores) => {
@@ -762,7 +750,11 @@ const Canvas = ({
         </div>
       )}
 
-      <div className="canvas-video-container">
+      <div
+        className={`canvas-video-container ${
+          modality === "mouse" ? "bg-white" : ""
+        }`}
+      >
         {modality !== "mouse" && (
           <video
             className="object-fit-cover"
@@ -823,7 +815,9 @@ const Canvas = ({
       >
         <StickyNote>
           Category to draw: <br />
-          {currentCategory}
+          <strong className="display-6 text-uppercase">
+            {currentCategory}
+          </strong>
           <div className="mt-2">
             <button
               data-tooltip-id="draw-btn"

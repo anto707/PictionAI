@@ -6,20 +6,18 @@ import { Link } from "react-router-dom";
 const Features = () => {
   const stack1Ref = useRef(null);
   const histogramRef = useRef(null);
-  const paperImageRef = useRef(null); // Ref for the image
+  const paperImageRef = useRef(null);
   const [barWidths, setBarWidths] = useState([0, 0, 0, 0]);
   const [showProbabilities, setShowProbabilities] = useState(false);
-  const [imageVisible, setImageVisible] = useState(false); // State for image visibility
+  const [imageVisible, setImageVisible] = useState(false);
 
-  // Example data (fake predictions)
+  // Fake predictions
   const predictions = [
     { label: "Fox", width: 40.14 },
     { label: "Cat", width: 24.99 },
     { label: "Mouse", width: 24.88 },
     { label: "Dog", width: 9.99 },
   ];
-
-  // Highlighted category for demonstration purposes
   const category = "Cat";
 
   useEffect(() => {
@@ -124,20 +122,20 @@ const Features = () => {
               <h1>Draw using gestures and facial features!</h1>
             </section>
             <section id="note2" className="note note2">
-              <h1>Mouse Mode</h1>
+              <h1>Mouse Modality</h1>
               <img src={"src/assets/draw_mouse.gif"} alt="Mouse Mode" />
             </section>
             <section id="note3" className="note note3">
-              <h1>Hand Mode</h1>
+              <h1>Hand Modality</h1>
               <img src={"src/assets/gesturedraw.gif"} alt="Hand Mode" />
             </section>
             <section id="note4" className="note note4">
-              <h1>Nose Mode</h1>
+              <h1>Nose Modality</h1>
               <img src="src/assets/nosedraw.gif" alt="Nose Mode" />
             </section>
             <section id="note5" className="note note5">
               <img src={"src/assets/chindraw.gif"} alt="Chin Mode" />
-              <h1>Chin Mode</h1>
+              <h1>Chin Modality</h1>
             </section>
           </div>
         </ScrollAnimation>
@@ -197,7 +195,6 @@ const Features = () => {
             </div>
             <div className="col-4 paper ruled text-center">
               <div>
-                {/* Apply animation to the image */}
                 <img
                   ref={paperImageRef}
                   src="src/assets/doodles/cat.png"

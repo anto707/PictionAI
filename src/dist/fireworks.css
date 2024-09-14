@@ -1,8 +1,8 @@
   
   .pyro > .before, .pyro > .after {
     position: absolute;
-    top: 0; /* Example: adjust as needed */
-    left: 0; /* Example: adjust as needed */
+    top: 0; 
+    left: 0; 
     width: 5px;
     height: 5px;
     border-radius: 50%;

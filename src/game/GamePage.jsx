@@ -182,7 +182,7 @@ const GamePage = () => {
 
             {currentStep === 4 && (
               <div>
-                <h1>Choose game mode</h1>
+                <h1>Choose game modality</h1>
                 <select
                   value={gameMode}
                   onChange={(e) => setGameMode(e.target.value)}
@@ -194,7 +194,7 @@ const GamePage = () => {
                   }}
                 >
                   <option value="mouse">Mouse (easy)</option>
-                  <option value="hand">Hand Gesture (medium)</option>
+                  <option value="hand">Hand (medium)</option>
                   <option value="nose">Nose (hard) </option>
                   <option value="chin">Chin (very hard) </option>
                 </select>
